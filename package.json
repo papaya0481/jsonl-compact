@@ -1,0 +1,75 @@
+{
+  "name": "jsonl-compact-viewer",
+  "displayName": "JSONL Compact Viewer",
+  "description": "DevTools-style JSONL viewer: one compact row per record, with inline expandable JSON trees.",
+  "version": "0.2.1",
+  "publisher": "local-tools",
+  "license": "MIT",
+  "private": true,
+  "engines": { "vscode": "^1.85.0" },
+  "categories": ["Visualization", "Other"],
+  "keywords": ["jsonl", "ndjson", "json lines", "tree", "viewer"],
+  "main": "./src/extension.js",
+  "extensionKind": ["workspace"],
+  "activationEvents": [],
+  "capabilities": {
+    "untrustedWorkspaces": { "supported": true },
+    "virtualWorkspaces": { "supported": true }
+  },
+  "contributes": {
+    "customEditors": [{
+      "viewType": "jsonlCompact.viewer",
+      "displayName": "JSONL Compact Viewer",
+      "selector": [
+        { "filenamePattern": "*.jsonl" },
+        { "filenamePattern": "*.ndjson" },
+        { "filenamePattern": "*.jsonlines" }
+      ],
+      "priority": "default"
+    }],
+    "commands": [{
+      "command": "jsonlCompact.open",
+      "title": "Open in Compact Viewer / 紧凑树形预览",
+      "category": "JSONL",
+      "icon": "$(list-tree)"
+    }],
+    "menus": {
+      "explorer/context": [{
+        "command": "jsonlCompact.open",
+        "when": "resourceExtname =~ /\\.(jsonl|ndjson|jsonlines)$/i",
+        "group": "navigation@20"
+      }],
+      "editor/title": [{
+        "command": "jsonlCompact.open",
+        "when": "resourceExtname =~ /\\.(jsonl|ndjson|jsonlines)$/i && activeCustomEditorId != jsonlCompact.viewer",
+        "group": "navigation"
+      }]
+    },
+    "configuration": {
+      "title": "JSONL Compact Viewer",
+      "properties": {
+        "jsonlCompact.pageSize": {
+          "type": "integer", "default": 200, "minimum": 20, "maximum": 1000,
+          "description": "Records per page / 每页记录数。"
+        },
+        "jsonlCompact.rowHeight": {
+          "type": "integer", "default": 24, "minimum": 18, "maximum": 36,
+          "description": "Compact row height in pixels / 紧凑行高（像素）。"
+        },
+        "jsonlCompact.previewFields": {
+          "type": "integer", "default": 3, "minimum": 1, "maximum": 10,
+          "description": "Number of fields in a collapsed summary / 折叠时预览的字段数。"
+        },
+        "jsonlCompact.showLineNumbers": {
+          "type": "boolean", "default": true,
+          "description": "Show physical source line numbers / 显示原文件行号。"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.js",
+    "check": "node --check src/extension.js && node --check src/document.js && node --check src/file-source.js && node --check src/records.js && node --check media/model.js && node --check media/viewer.js",
+    "package": "python3 scripts/package.py"
+  }
+}

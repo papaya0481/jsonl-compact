@@ -1,0 +1,13 @@
+.vscode/**
+.github/**
+.git/**
+test/**
+scripts/**
+artifacts/**
+node_modules/**
+*.vsix
+.gitignore
+.gitattributes
+.editorconfig
+AGENTS.md
+CONTRIBUTING.md
